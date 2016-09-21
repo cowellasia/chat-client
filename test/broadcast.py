@@ -4,7 +4,7 @@ import sys
 import json
 import requests
 
-SERVER="http://localhost:8888"
+SERVER="http://localhost:3000"
 
 try:
     headers = {'Content-Type': 'application/json'}
