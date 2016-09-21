@@ -1,7 +1,7 @@
 
 (function(){
     var debug = false;
-    var socket = io.connect('',{transports: ['websocket'], upgrade: false});
+    var socket = io.connect('http://unchain-realtime.eu-west-1.elasticbeanstalk.com',{transports: ['websocket'], upgrade: false});
     // Connection established
     socket.on('connected', function (data) {
         console.log(data);
