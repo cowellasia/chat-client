@@ -1,7 +1,7 @@
 
 (function(){
     var debug = false;
-    var socket = io.connect(window.location.host);
+    var socket = io.connect('',{transports: ['websocket'], upgrade: false});
     // Connection established
     socket.on('connected', function (data) {
         console.log(data);
