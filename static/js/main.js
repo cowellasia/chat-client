@@ -1,31 +1,17 @@
 
-// Author: Sergio Castaño Arteaga
-// Email: sergio.castano.arteaga@gmail.com
-
 (function(){
-
     var debug = false;
-
-    // ***************************************************************************
-    // Socket.io events
-    // ***************************************************************************
-    
     var socket = io.connect(window.location.host);
-
     // Connection established
     socket.on('connected', function (data) {
         console.log(data);
-
         // Get users connected to mainroom
         socket.emit('getUsersInRoom', {'room':'MainRoom'});
-
         if (debug) {
             // Subscription to rooms
             socket.emit('subscribe', {'username':'sergio', 'rooms':['sampleroom']});
-
             // Send sample message to room
             socket.emit('newMessage', {'room':'sampleroom', 'msg':'Hellooooooo!'});
-
             // Auto-disconnect after 10 minutes
             setInterval(function() {
                 socket.emit('unsubscribe', {'rooms':['sampleroom']});
@@ -33,19 +19,16 @@
             }, 600000);
         }
     });
-
     // Disconnected from server
     socket.on('disconnect', function (data) {
         var info = {'room':'MainRoom', 'username':'ServerBot', 'msg':'----- Lost connection to server -----'};
         addMessage(info);
     });
-    
     // Reconnected to server
     socket.on('reconnect', function (data) {
         var info = {'room':'MainRoom', 'username':'ServerBot', 'msg':'----- Reconnected to server -----'};
         addMessage(info);
     });
-
     // Subscription to room confirmed
     socket.on('subscriptionConfirmed', function(data) {
         // Create room space in interface
@@ -53,7 +36,6 @@
             addRoomTab(data.room);
             addRoom(data.room);
         }
-
         // Close modal if opened
         $('#modal_joinroom').modal('hide');
     });
@@ -66,7 +48,6 @@
             removeRoom(data.room);
         }
     });
-
     // User joins room
     socket.on('userJoinsRoom', function(data) {
         console.log("userJoinsRoom: %s", JSON.stringify(data));
@@ -76,29 +57,24 @@
         // Add user to connected users list
         addUser(data);
     });
-
     // User leaves room
     socket.on('userLeavesRoom', function(data) {
         console.log("userLeavesRoom: %s", JSON.stringify(data));
         // Log leave in conversation
         addMessage(data);
-
         // Remove user from connected users list
         removeUser(data);
     });
-
     // Message received
     socket.on('newMessage', function (data) {
         console.log("newMessage: %s", JSON.stringify(data));
         addMessage(data);
-
         // Scroll down room messages
         var room_messages = '#'+data.room+' #room_messages';
         $(room_messages).animate({
             scrollTop: $(room_messages).height()
         }, 300);
     });
-
     // Users in room received
     socket.on('usersInRoom', function(data) {
         console.log('usersInRoom: %s', JSON.stringify(data));
@@ -106,7 +82,6 @@
             addUser(user);
         });
     });
-
     // User nickname updated
     socket.on('userNicknameUpdated', function(data) {
         console.log("userNicknameUpdated: %s", JSON.stringify(data));
@@ -116,11 +91,6 @@
         var info = {'room':data.room, 'username':'ServerBot', 'msg':msg};
         addMessage(info);
     });
-
-    // ***************************************************************************
-    // Templates and helpers
-    // ***************************************************************************
-    
     var templates = {};
     var getTemplate = function(path, callback) {
         var source;
@@ -184,7 +154,6 @@
             $(room_messages).append(template(msg));
         });
     };
-    
     // Add user to connected users list
     var addUser = function(user) {
         getTemplate('js/templates/user.handlebars', function(template) {
